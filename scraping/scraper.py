@@ -16,35 +16,63 @@ def writeUrlsToCsv(csvName, urls):
 		for url in urls:
 			wr.writerow(url)
 
-PATH = "/Users/eshantarneja/Documents/DataScience/storage/chromedriver" 
 
 
-driver = webdriver.Chrome(PATH)
-site="https://www.spotrac.com/nba/contracts/sort-value/all-time/free-agent-2009/limit-100/"
-driver.get(site)
-data=[]
-try:
-	main = WebDriverWait(driver,10).until(
-		EC.presence_of_element_located((By.CLASS_NAME, "teams"))
-		)
-	rows = main.find_elements(By.TAG_NAME, "tr") # get all of the rows in the table
-	for row in rows:
-		cols = row.find_elements(By.TAG_NAME, "td")
-		info=[]
-		for col in cols:
-			val=col.text
-			print(val)
-			info.append(val)
-		data.append(info)
+# def scrapeDataByDraft():
+# 	PATH = "/Users/eshantarneja/Documents/DataScience/storage/chromedriver" 
+# 	draftYear=['2003','2004','2005']
+# 	data=[]
+# 	for year in draftYear:
+# 		print("current draft year: ", year)
+# 		driver = webdriver.Chrome(PATH)
+# 		site ="https://www.spotrac.com/nba/contracts/sort-value/all-time/draft-year-"+year+"/limit-2000/"
+# 		driver.get(site)
+# 		try:
+# 			main = WebDriverWait(driver,10).until(
+# 				EC.presence_of_element_located((By.CLASS_NAME, "teams"))
+# 				)
+# 			rows = main.find_elements(By.TAG_NAME, "tr") # get all of the rows in the table
+# 			for row in rows:
+# 				cols = row.find_elements(By.TAG_NAME, "td")
+# 				info=[]
+# 				for col in cols:
+# 					val=col.text
+# 					print(val)
+# 					info.append(val)
+# 				info.append(year)
+# 				data.append(info)
 
-finally:
-	driver.quit()
+# 		finally:
+# 			driver.quit()
 
+# 	writeUrlsToCsv('salaryData.csv', data)
 
+def scrapeData():
+	PATH = "/Users/eshantarneja/Documents/DataScience/storage/chromedriver" 
+	data=[]
+	driver = webdriver.Chrome(PATH)
+	site ="https://www.spotrac.com/nba/contracts/sort-value/all-time/limit-20000/"
+	driver.get(site)
+	try:
+		main = WebDriverWait(driver,10).until(
+			EC.presence_of_element_located((By.CLASS_NAME, "teams"))
+			)
+		rows = main.find_elements(By.TAG_NAME, "tr") # get all of the rows in the table
+		for row in rows:
+			cols = row.find_elements(By.TAG_NAME, "td")
+			info=[]
+			for col in cols:
+				val=col.text
+				print(val)
+				info.append(val)
+			data.append(info)
 
+	finally:
+			driver.quit()
 
+	writeUrlsToCsv('bigList.csv', data)
 
-writeUrlsToCsv('test.csv', data)
+scrapeData()
 
 
 
